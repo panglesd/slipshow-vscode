@@ -1,5 +1,9 @@
 {
   "name": "slipshow",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/panglesd/slipshow-vscode.git"
+  },
   "publisher": "Slipshow",
   "displayName": "slipshow",
   "description": "An extension to write, preview and compile slipshow presentations",
