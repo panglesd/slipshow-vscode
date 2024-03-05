@@ -1,0 +1,19 @@
+(rule
+ (action
+  (copy src/bin/main.bc.js extension.js))
+ (mode promote))
+
+(rule
+ (deps extension.js)
+ (action
+  (with-stdout-to
+   extension_compiled.js
+   (run
+    esbuild
+    extension.js
+    --bundle
+    --external:vscode
+    --platform=node
+    --target=es2022
+    --sourcemap)))
+ (mode promote))

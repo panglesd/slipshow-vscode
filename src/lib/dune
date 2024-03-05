@@ -1,0 +1,2 @@
+(library
+ (name slipshow_extension_builder))

@@ -1,0 +1,4 @@
+(executable
+ (name vscode_previewer)
+ (modes js)
+ (libraries brr sliphub.previewer))
