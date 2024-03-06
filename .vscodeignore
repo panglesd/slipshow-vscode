@@ -1,0 +1,9 @@
+_build/
+dune
+dune-project
+extension.js
+extension_old.js
+.ocamlformat
+src/
+test/
+*~*
