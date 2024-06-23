@@ -27,7 +27,7 @@ let preview_callback extension ~args:_ =
   | Some editor ->
       let panel =
         Window.createWebviewPanel ~viewType:"slipshowPanel"
-          ~title:"Sliphow preview" ~showOptions:ViewColumn.Two
+          ~title:"Slipshow preview" ~showOptions:ViewColumn.Two
       in
       let document = TextEditor.document editor in
       let the_uri = TextDocument.uri document in
