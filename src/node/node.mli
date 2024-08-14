@@ -36,6 +36,7 @@ module Buffer : sig
   include Ojs.T
 
   val toString : t -> string
+  val toBase64 : t -> string
   val from : string -> t
   val concat : t list -> t
   val append : t ref -> t -> unit
@@ -103,6 +104,7 @@ end
 module Fs : sig
   val readDir : string -> (string list, string) result Promise.t
   val readFile : string -> string Promise.t
+  val readFileSync : string -> Buffer.t
   val writeFile : string -> content:string -> unit Promise.t
   val exists : string -> bool Promise.t
 end

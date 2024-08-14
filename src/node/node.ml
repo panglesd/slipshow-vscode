@@ -57,6 +57,7 @@ module Buffer = struct
   include
     [%js:
     val toString : t -> string [@@js.call]
+    val toString' : t -> string option -> string [@@js.call "toString"]
     val from : string -> t [@@js.global "Buffer.from"]
     val concat : t list -> t [@@js.global "Buffer.concat"]
 
@@ -70,6 +71,7 @@ module Buffer = struct
       unit
     [@@js.call]]
 
+  let toBase64 b = toString' b (Some "base64")
   let append buf other = buf := concat [ !buf; other ]
 end
 
@@ -143,6 +145,9 @@ module Fs = struct
     val readFile : string -> encoding:string -> string Promise.t
     [@@js.global "fs.readFile"]
 
+    val readFileSync : string -> encoding:string -> Buffer.t
+    [@@js.global "fs.readFileSync"]
+
     val writeFile : string -> string -> encoding:string -> unit Promise.t
     [@@js.global "fs.writeFile"]
 
@@ -154,6 +159,7 @@ module Fs = struct
            Promise.return (Error (JsError.message error)))
 
   let readFile = readFile ~encoding:"utf8"
+  let readFileSync = readFileSync ~encoding:""
   let writeFile path ~content = writeFile path content ~encoding:"utf8"
 end
 

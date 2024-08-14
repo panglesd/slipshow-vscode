@@ -5,3 +5,9 @@
  (preprocess (pps ppx_blob))
   (preprocessor_deps ../src-panel/vscode_previewer.bc.js)
  (libraries slipshow_extension_builder vscode brr js_of_ocaml slipshow bos node))
+
+(executable
+ ; (public_name slipshow_extension_builder)
+ (name debug)
+ (modes js)
+ (libraries slipshow_extension_builder brr js_of_ocaml slipshow bos node))

@@ -4,6 +4,7 @@ const { promisify } = require("node:util");
 joo_global_object.fs = {
   readDir: promisify(fs.readdir),
   readFile: promisify(fs.readFile),
+  readFileSync: fs.readFileSync,
   writeFile: promisify(fs.writeFile),
   exists: promisify(fs.exists),
 };

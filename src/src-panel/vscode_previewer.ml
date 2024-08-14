@@ -12,6 +12,8 @@ let _ =
       if Jstr.equal source_name (Jstr.v "frame") then ()
       else
         let raw_data : Jv.t = Brr_io.Message.Ev.data (Brr.Ev.as_type event) in
-        let src = Jv.to_string raw_data (* "# abcd" *) in
-        Previewer.preview previewer src)
+        let src =
+          Jv.to_string raw_data (* "# abcd" *) |> Slipshow.string_to_delayed
+        in
+        Previewer.preview_compiled previewer src)
     (Brr.Window.as_target Brr.G.window)
