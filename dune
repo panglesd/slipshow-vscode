@@ -17,9 +17,3 @@
     --target=es2022
     --sourcemap)))
  (mode promote))
-
-; (env
-;  (_
-;   (js_of_ocaml
-;    (flags (:standard --enable effects))
-;    (build_runtime_flags (:standard --enable effects)))))
