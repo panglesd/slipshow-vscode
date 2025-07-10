@@ -1,43 +1,22 @@
-let resolve_images document : string -> Slipshow.asset =
+let read_file document : Slipshow.file_reader =
  fun s ->
   try
-    if
-      Astring.String.is_infix ~affix:"://" s
-      || String.starts_with ~prefix:"//" s
-    then Slipshow.Remote s
-    else
-      let s = Fpath.v s in
-      let s =
-        if Fpath.is_abs s then s
-        else
-          let open Vscode in
-          let root =
-            TextDocument.fileName document |> Fpath.v |> Fpath.parent
-          in
-          Fpath.( // ) root s
-      in
+    let s =
+      if Fpath.is_abs s then s
+      else
+        let open Vscode in
+        let root = TextDocument.fileName document |> Fpath.v |> Fpath.parent in
+        Fpath.( // ) root s
+    in
+    let content =
       let content =
-        let content =
-          Node.Fs.readFileSync @@ Fpath.to_string s
-          |> Node.Buffer.toBase64 |> Base64.decode_exn
-        in
-        content
+        Node.Fs.readFileSync @@ Fpath.to_string s
+        |> Node.Buffer.toBase64 |> Base64.decode_exn
       in
-      let mime_of_ext = function
-        | "apng" ->
-            Some "image/apng" (* Animated Portable Network Graphics (APNG) *)
-        | "avif" -> Some "image/avif" (*  AV1 Image File Format (AVIF) *)
-        | "gif" -> Some "image/gif" (* Graphics Interchange Format (GIF) *)
-        | "jpeg" ->
-            Some "image/jpeg" (* Joint Photographic Expert Group image (JPEG) *)
-        | "png" -> Some "image/png" (* Portable Network Graphics (PNG) *)
-        | "svg+xml" -> Some "image/svg+xml" (* Scalable Vector Graphics (SVG) *)
-        | "webp" -> Some "image/webp" (* Web Picture format (WEBP) *)
-        | _ -> None
-      in
-      let mime_type = mime_of_ext (Fpath.get_ext s) in
-      Local { mime_type; content }
-  with _ -> Remote s
+      content
+    in
+    Ok (Some content)
+  with _ -> Ok None
 
 let slipshow_callback ~args:_ =
   let open Vscode in
@@ -50,13 +29,13 @@ let slipshow_callback ~args:_ =
         TextDocument.fileName document
         |> Fpath.v |> Fpath.set_ext "html" |> Fpath.to_string
       in
-      let resolve_images = resolve_images document in
+      let read_file = read_file document in
       let _ =
         let open Promise.Syntax in
         let+ slipshow_content =
           (* Effect.Deep.try_with *)
           (*   (fun () ->  *)
-          Promise.return @@ Slipshow.convert ~resolve_images text
+          Promise.return @@ Slipshow.convert ~read_file text
           (* ) *)
           (* () *)
           (* { *)
@@ -100,8 +79,8 @@ let preview_callback extension ~args:_ =
       let text = TextDocument.getText document () in
       let wb = WebviewPanel.webview panel in
       let update_content text =
-        let resolve_images = resolve_images document in
-        let delayed = Slipshow.delayed ~resolve_images text in
+        let read_file = read_file document in
+        let delayed = Slipshow.delayed ~read_file text in
         let text = Slipshow.delayed_to_string delayed in
         WebView.postMessage (WebviewPanel.webview panel) (Ojs.string_to_js text)
       in
@@ -146,7 +125,7 @@ let preview_callback extension ~args:_ =
 </html>
          |}
           (* Assets.(read Index_js) *)
-          [%blob "src/src-panel/vscode_previewer.bc.js"]
+          [%blob "../src-panel/vscode_previewer.bc.js"]
       in
       let _ = WebView.set_html wb html in
       let _ = update_content text in

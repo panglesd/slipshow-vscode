@@ -1,6 +1,6 @@
 (* A version with less features to be able to run it in webIDE *)
 
-let resolve_images _document : string -> Slipshow.asset = fun s -> Remote s
+let resolve_images _document : Slipshow.file_reader = fun _s -> Ok None
 
 let slipshow_callback ~args:_ =
   let _ =
@@ -25,7 +25,7 @@ let preview_callback extension ~args:_ =
       let wb = WebviewPanel.webview panel in
       let update_content text =
         let resolve_images = resolve_images document in
-        let delayed = Slipshow.delayed ~resolve_images text in
+        let delayed = Slipshow.delayed ~read_file:resolve_images text in
         let text = Slipshow.delayed_to_string delayed in
         WebView.postMessage (WebviewPanel.webview panel) (Ojs.string_to_js text)
       in
@@ -70,7 +70,7 @@ let preview_callback extension ~args:_ =
 </html>
          |}
           (* Assets.(read Index_js) *)
-          [%blob "src/src-panel/vscode_previewer.bc.js"]
+          [%blob "../src-panel/vscode_previewer.bc.js"]
       in
       let _ = WebView.set_html wb html in
       let _ = update_content text in
