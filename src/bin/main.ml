@@ -1,46 +1,43 @@
 let resolve_images document : string -> Slipshow.asset =
-  let open Vscode in
-  fun s ->
-    try
-      if
-        Astring.String.is_infix ~affix:"://" s
-        || String.starts_with ~prefix:"//" s
-      then Slipshow.Remote s
-      else
-        let s = Fpath.v s in
-        let s =
-          if Fpath.is_abs s then s
-          else
-            let open Vscode in
-            let root =
-              TextDocument.fileName document |> Fpath.v |> Fpath.parent
-            in
-            Fpath.( // ) root s
-        in
-        let content =
-          let content =
-            Node.Fs.readFileSync @@ Fpath.to_string s
-            |> Node.Buffer.toBase64 |> Base64.decode_exn
+ fun s ->
+  try
+    if
+      Astring.String.is_infix ~affix:"://" s
+      || String.starts_with ~prefix:"//" s
+    then Slipshow.Remote s
+    else
+      let s = Fpath.v s in
+      let s =
+        if Fpath.is_abs s then s
+        else
+          let open Vscode in
+          let root =
+            TextDocument.fileName document |> Fpath.v |> Fpath.parent
           in
-          content
+          Fpath.( // ) root s
+      in
+      let content =
+        let content =
+          Node.Fs.readFileSync @@ Fpath.to_string s
+          |> Node.Buffer.toBase64 |> Base64.decode_exn
         in
-        let mime_of_ext = function
-          | "apng" ->
-              Some "image/apng" (* Animated Portable Network Graphics (APNG) *)
-          | "avif" -> Some "image/avif" (*  AV1 Image File Format (AVIF) *)
-          | "gif" -> Some "image/gif" (* Graphics Interchange Format (GIF) *)
-          | "jpeg" ->
-              Some
-                "image/jpeg" (* Joint Photographic Expert Group image (JPEG) *)
-          | "png" -> Some "image/png" (* Portable Network Graphics (PNG) *)
-          | "svg+xml" ->
-              Some "image/svg+xml" (* Scalable Vector Graphics (SVG) *)
-          | "webp" -> Some "image/webp" (* Web Picture format (WEBP) *)
-          | _ -> None
-        in
-        let mime_type = mime_of_ext (Fpath.get_ext s) in
-        Local { mime_type; content }
-    with _ -> Remote s
+        content
+      in
+      let mime_of_ext = function
+        | "apng" ->
+            Some "image/apng" (* Animated Portable Network Graphics (APNG) *)
+        | "avif" -> Some "image/avif" (*  AV1 Image File Format (AVIF) *)
+        | "gif" -> Some "image/gif" (* Graphics Interchange Format (GIF) *)
+        | "jpeg" ->
+            Some "image/jpeg" (* Joint Photographic Expert Group image (JPEG) *)
+        | "png" -> Some "image/png" (* Portable Network Graphics (PNG) *)
+        | "svg+xml" -> Some "image/svg+xml" (* Scalable Vector Graphics (SVG) *)
+        | "webp" -> Some "image/webp" (* Web Picture format (WEBP) *)
+        | _ -> None
+      in
+      let mime_type = mime_of_ext (Fpath.get_ext s) in
+      Local { mime_type; content }
+  with _ -> Remote s
 
 let slipshow_callback ~args:_ =
   let open Vscode in

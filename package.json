@@ -7,7 +7,7 @@
   "publisher": "Slipshow",
   "displayName": "slipshow",
   "description": "An extension to write, preview and compile slipshow presentations",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "engines": {
     "vscode": "^1.86.0"
   },
@@ -16,6 +16,7 @@
   ],
   "activationEvents": [],
   "main": "./extension_compiled.js",
+  "browser": "./web_ide.js",
   "contributes": {
     "commands": [
       {
@@ -43,5 +44,9 @@
     "eslint": "^8.56.0",
     "tty-browserify": "^0.0.1",
     "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
+    "@esbuild-plugins/node-modules-polyfill": "^0.2.2"
   }
 }

@@ -3,6 +3,13 @@
   (copy src/bin/main.bc.js extension.js))
  (mode promote))
 
+
+(rule
+ (action
+  (copy src/bin_web/main.bc.js extension2.js))
+ (mode promote))
+
+
 (rule
  (deps extension.js)
  (action
@@ -16,4 +23,14 @@
     --platform=node
     --target=es2022
     --sourcemap)))
+ (mode promote))
+
+; We probably changed this from extension.js to web_ide.js to allow the
+; extension to run on the web-based version of vscode
+(rule
+ (deps extension2.js esbuild.js)
+ (action
+   (run
+     node esbuild.js --production))
+  (target web_ide.js)
  (mode promote))
