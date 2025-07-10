@@ -1,3 +1,5 @@
+(* A version with less features to be able to run it in webIDE *)
+
 let resolve_images _document : string -> Slipshow.asset = fun s -> Remote s
 
 let slipshow_callback ~args:_ =

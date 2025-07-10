@@ -25,7 +25,7 @@
     --sourcemap)))
  (mode promote))
 
-; We probably changed this from extension.js to web_ide.js to allow the
+; We add web_ide.js to extension.js as it removes some features to allow the
 ; extension to run on the web-based version of vscode
 (rule
  (deps extension2.js esbuild.js)
