@@ -4,6 +4,11 @@ All notable changes to the "slipshow" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## v0.0.7
+
+- Update slipshow's version to 0.8.0
+- Debounce preview instead of previewing on each key stroke.
+
 ## v0.0.4
 
 - Update slipshow's version to 0.3.0

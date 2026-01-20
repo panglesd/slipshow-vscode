@@ -1,6 +1,5 @@
 (* A version with less features to be able to run it in webIDE *)
 
-let () = print_endline "UUIOUIUI"
 let resolve_images _document : Slipshow.file_reader = fun _s -> Ok None
 
 let slipshow_callback ~args:_ =
