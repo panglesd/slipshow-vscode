@@ -35,7 +35,8 @@ let slipshow_callback ~args:_ =
         let+ slipshow_content =
           (* Effect.Deep.try_with *)
           (*   (fun () ->  *)
-          Promise.return @@ Slipshow.convert ~read_file text
+          Promise.return
+          @@ Slipshow.convert ~include_speaker_view:true ~read_file text
           (* ) *)
           (* () *)
           (* { *)
@@ -78,20 +79,39 @@ let preview_callback extension ~args:_ =
       let the_uri = TextDocument.uri document in
       let text = TextDocument.getText document () in
       let wb = WebviewPanel.webview panel in
-      let update_content text =
-        let read_file = read_file document in
-        let delayed = Slipshow.delayed ~read_file text in
-        let text = Slipshow.delayed_to_string delayed in
-        WebView.postMessage (WebviewPanel.webview panel) (Ojs.string_to_js text)
+      let update_content =
+        let timer = ref None in
+        fun text ->
+          let go () =
+            timer := None;
+            let read_file = read_file document in
+            let delayed = Slipshow.delayed ~read_file text in
+            let text = Slipshow.delayed_to_string delayed in
+            WebView.postMessage
+              (WebviewPanel.webview panel)
+              (Ojs.string_to_js text)
+          in
+          let () =
+            match !timer with Some id -> Brr.G.stop_timer id | None -> ()
+          in
+          let i =
+            Brr.G.set_timeout ~ms:500 (fun _ ->
+                let _ = go () in
+                ())
+          in
+          timer := Some i
       in
 
       let listener td =
+        let contentChanges = TextDocumentChangeEvent.contentChanges td in
         let document = TextDocumentChangeEvent.document td in
         let uri = TextDocument.uri document in
-        let is_good = Uri.equal uri the_uri in
+        let is_good =
+          Uri.equal uri the_uri && (not @@ List.is_empty contentChanges)
+        in
         let document = TextEditor.document editor in
         let text = TextDocument.getText document () in
-        let _ = if is_good then update_content text else Promise.return false in
+        let () = if is_good then update_content text in
         ()
       in
       let disposable = Workspace.onDidChangeTextDocument ~listener () in
@@ -105,20 +125,23 @@ let preview_callback extension ~args:_ =
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-           <title>Cat Coding</title>
+           <title>Slipshow</title>
            <style>
-           #right-panel1.active_panel, #right-panel2.active_panel {
+           .right-panel1.active_panel, .right-panel2.active_panel {
              z-index: 1;
            }
-           #right-panel1, #right-panel2 {
+           .right-panel1, .right-panel2 {
              z-index: 0;
+             width:100%%;
+             position:absolute;
+             inset:0;
+             border:0;
+             height: 100vh;
            }
 </style>
 </head>
            <body>
            <div id="iframes">
-	     <iframe name="frame" id="right-panel1" style="width:100%%; position:absolute; top:0;bottom:0;left:0;right:0;border:0; height: 100vh"></iframe>
-	     <iframe name="frame" id="right-panel2" style="width:100%%; position:absolute; top:0;bottom:0;left:0;right:0;border:0; height: 100vh"></iframe>
            </div>
            <script>%s</script>
 </body>

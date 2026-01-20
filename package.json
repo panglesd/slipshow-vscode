@@ -21,11 +21,11 @@
     "commands": [
       {
         "command": "slipshow.preview",
-        "title": "Preview Slipshow"
+          "title": "Slipshow: Preview"
       },
       {
         "command": "slipshow.slipshow",
-        "title": "Compile Slipshow"
+          "title": "Slipshow: Compile"
       }
     ]
   },

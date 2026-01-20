@@ -1,5 +1,6 @@
 (* A version with less features to be able to run it in webIDE *)
 
+let () = print_endline "UUIOUIUI"
 let resolve_images _document : Slipshow.file_reader = fun _s -> Ok None
 
 let slipshow_callback ~args:_ =
@@ -50,20 +51,23 @@ let preview_callback extension ~args:_ =
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-           <title>Cat Coding</title>
+           <title>Slipshow</title>
            <style>
-           #right-panel1.active_panel, #right-panel2.active_panel {
+           .right-panel1.active_panel, .right-panel2.active_panel {
              z-index: 1;
            }
-           #right-panel1, #right-panel2 {
+           .right-panel1, .right-panel2 {
              z-index: 0;
+             width:100%%;
+             position:absolute;
+             inset:0;
+             border:0;
+             height: 100vh;
            }
 </style>
 </head>
            <body>
            <div id="iframes">
-	     <iframe name="frame" id="right-panel1" style="width:100%%; position:absolute; top:0;bottom:0;left:0;right:0;border:0; height: 100vh"></iframe>
-	     <iframe name="frame" id="right-panel2" style="width:100%%; position:absolute; top:0;bottom:0;left:0;right:0;border:0; height: 100vh"></iframe>
            </div>
            <script>%s</script>
 </body>
