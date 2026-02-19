@@ -4,6 +4,10 @@ All notable changes to the "slipshow" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## v0.0.8
+
+- Update slipshow's version to 0.9.0
+
 ## v0.0.7
 
 - Update slipshow's version to 0.8.0
