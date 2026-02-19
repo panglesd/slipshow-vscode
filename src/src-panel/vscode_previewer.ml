@@ -1,6 +1,6 @@
 let () = print_endline "yoOOOOOOOOOOOO"
 let div = Brr.El.find_first_by_selector (Jstr.v "#iframes") |> Option.get
-let previewer = Previewer.create_previewer div
+let previewer = Previewer.create_previewer ~include_speaker_view:false div
 
 let _ =
   Brr.Ev.listen Brr_io.Message.Ev.message

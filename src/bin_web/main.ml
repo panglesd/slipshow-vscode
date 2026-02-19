@@ -25,7 +25,9 @@ let preview_callback extension ~args:_ =
       let wb = WebviewPanel.webview panel in
       let update_content text =
         let resolve_images = resolve_images document in
-        let delayed = Slipshow.delayed ~read_file:resolve_images text in
+        let delayed =
+          Slipshow.delayed ~has_speaker_view:true ~read_file:resolve_images text
+        in
         let text = Slipshow.delayed_to_string delayed in
         WebView.postMessage (WebviewPanel.webview panel) (Ojs.string_to_js text)
       in

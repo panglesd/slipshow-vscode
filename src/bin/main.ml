@@ -36,7 +36,7 @@ let slipshow_callback ~args:_ =
           (* Effect.Deep.try_with *)
           (*   (fun () ->  *)
           Promise.return
-          @@ Slipshow.convert ~include_speaker_view:true ~read_file text
+          @@ Slipshow.convert ~has_speaker_view:true ~read_file text
           (* ) *)
           (* () *)
           (* { *)
@@ -85,7 +85,9 @@ let preview_callback extension ~args:_ =
           let go () =
             timer := None;
             let read_file = read_file document in
-            let delayed = Slipshow.delayed ~read_file text in
+            let delayed =
+              Slipshow.delayed ~has_speaker_view:true ~read_file text
+            in
             let text = Slipshow.delayed_to_string delayed in
             WebView.postMessage
               (WebviewPanel.webview panel)
