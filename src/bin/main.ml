@@ -32,7 +32,8 @@ let slipshow_callback ~args:_ =
       let read_file = read_file document in
       let _ =
         let open Promise.Syntax in
-        let+ slipshow_content =
+        (* TODO: handle warnings *)
+        let+ slipshow_content, _warnings =
           (* Effect.Deep.try_with *)
           (*   (fun () ->  *)
           Promise.return
@@ -85,10 +86,19 @@ let preview_callback extension ~args:_ =
           let go () =
             timer := None;
             let read_file = read_file document in
-            let delayed =
+            let delayed, warnings =
               Slipshow.delayed ~has_speaker_view:true ~read_file text
             in
-            let text = Slipshow.delayed_to_string delayed in
+            let warnings =
+              List.map
+                (Format.asprintf "%a@.@."
+                   (Grace_ansi_renderer.pp_diagnostic ?config:None
+                      ~code_to_string:Diagnosis.to_code))
+                warnings
+            in
+            let warnings = List.map (Ansi.process (Ansi.create ())) warnings in
+            let warnings = String.concat "" warnings in
+            let text = Slipshow.delayed_to_string (delayed, warnings) in
             WebView.postMessage
               (WebviewPanel.webview panel)
               (Ojs.string_to_js text)
@@ -129,27 +139,21 @@ let preview_callback extension ~args:_ =
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
            <title>Slipshow</title>
            <style>
-           .right-panel1.active_panel, .right-panel2.active_panel {
-             z-index: 1;
-           }
-           .right-panel1, .right-panel2 {
-             z-index: 0;
-             width:100%%;
-             position:absolute;
-             inset:0;
-             border:0;
-             height: 100vh;
-           }
 </style>
 </head>
            <body>
-           <div id="iframes">
+           <div id="iframes" style="position:absolute;inset:0;">
            </div>
+           <pre id="warnings-slipshow" class="hide-warnings"></pre>
+           <div id="warnings-slipshow-show">⚠️</div>
+           <style>%s</style>
+           <style>%s</style>
            <script>%s</script>
 </body>
 </html>
          |}
           (* Assets.(read Index_js) *)
+          Ansi.css Server_assets.Style.v
           [%blob "../src-panel/vscode_previewer.bc.js"]
       in
       let _ = WebView.set_html wb html in

@@ -4,4 +4,4 @@
  (modes js)
  (preprocess (pps ppx_blob))
   (preprocessor_deps ../src-panel/vscode_previewer.bc.js)
- (libraries slipshow_extension_builder vscode brr js_of_ocaml slipshow bos node))
+ (libraries slipshow_extension_builder vscode brr js_of_ocaml slipshow bos node slipshow.server_assets ansi))

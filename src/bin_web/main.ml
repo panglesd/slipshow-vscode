@@ -25,10 +25,11 @@ let preview_callback extension ~args:_ =
       let wb = WebviewPanel.webview panel in
       let update_content text =
         let resolve_images = resolve_images document in
-        let delayed =
+        let delayed, _warnings =
           Slipshow.delayed ~has_speaker_view:true ~read_file:resolve_images text
         in
-        let text = Slipshow.delayed_to_string delayed in
+        (* TODO: handle warnings *)
+        let text = Slipshow.delayed_to_string (delayed, "") in
         WebView.postMessage (WebviewPanel.webview panel) (Ojs.string_to_js text)
       in
 
@@ -53,22 +54,9 @@ let preview_callback extension ~args:_ =
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
            <title>Slipshow</title>
-           <style>
-           .right-panel1.active_panel, .right-panel2.active_panel {
-             z-index: 1;
-           }
-           .right-panel1, .right-panel2 {
-             z-index: 0;
-             width:100%%;
-             position:absolute;
-             inset:0;
-             border:0;
-             height: 100vh;
-           }
-</style>
 </head>
            <body>
-           <div id="iframes">
+           <div id="iframes" style="position:absolute;inset:0;">
            </div>
            <script>%s</script>
 </body>
