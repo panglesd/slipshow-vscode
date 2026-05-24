@@ -21,7 +21,7 @@ let read_file document : Slipshow.file_reader =
 let slipshow_callback ~args:_ =
   let open Vscode in
   match Window.activeTextEditor () with
-  | None -> ()
+  | None -> Ojs.unit_to_js ()
   | Some editor ->
       let document = TextEditor.document editor in
       let text = TextDocument.getText document () in
@@ -36,8 +36,12 @@ let slipshow_callback ~args:_ =
         let+ slipshow_content, _warnings =
           (* Effect.Deep.try_with *)
           (*   (fun () ->  *)
+          let entry_point = Fpath.v "-" in
+          let read_file f =
+            if Fpath.equal entry_point f then Ok (Some text) else read_file f
+          in
           Promise.return
-          @@ Slipshow.convert ~has_speaker_view:true ~read_file text
+          @@ Slipshow.convert ~has_speaker_view:true ~read_file entry_point
           (* ) *)
           (* () *)
           (* { *)
@@ -65,12 +69,12 @@ let slipshow_callback ~args:_ =
         (* let _ = Vscode.Window.showInformationMessage ~message () in *)
         ()
       in
-      ()
+      Ojs.unit_to_js ()
 
 let preview_callback extension ~args:_ =
   let open Vscode in
   match Window.activeTextEditor () with
-  | None -> ()
+  | None -> Ojs.unit_to_js ()
   | Some editor ->
       let panel =
         Window.createWebviewPanel ~viewType:"slipshowPanel"
@@ -86,8 +90,12 @@ let preview_callback extension ~args:_ =
           let go () =
             timer := None;
             let read_file = read_file document in
+            let entry_point = Fpath.v "-" in
+            let read_file f =
+              if Fpath.equal entry_point f then Ok (Some text) else read_file f
+            in
             let delayed, warnings =
-              Slipshow.delayed ~has_speaker_view:true ~read_file text
+              Slipshow.delayed ~has_speaker_view:true ~read_file entry_point
             in
             let warnings =
               List.map
@@ -158,7 +166,7 @@ let preview_callback extension ~args:_ =
       in
       let _ = WebView.set_html wb html in
       let _ = update_content text in
-      ()
+      Ojs.unit_to_js ()
 
 let activate context =
   let ss_disposable =
@@ -175,3 +183,8 @@ let activate context =
 let () =
   let open Js_of_ocaml.Js in
   export "activate" (wrap_callback activate)
+
+(* I had to update vscode-ocaml-platform to support latest ocaml, but its API
+   has changed, and I was forced to change the callback from returning unit to
+   returning Ojs.t. I have implemented something, but did not test. If something
+   breaks, look there, me from the future! *)
