@@ -23,7 +23,7 @@
   "contributes": {
     "languages": [
       {
-        "id": "slipshow",
+        "id": "markdown",
         "extensions": [
           ".slp"
         ]
