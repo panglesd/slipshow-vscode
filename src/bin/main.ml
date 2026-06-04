@@ -6,7 +6,9 @@ let activate context =
     ServerOptions.create ~args:[ "lsp" ] ~command:"slipshow" ()
   in
   let documentSelector =
-    [| DocumentSelector.language ~scheme:"file" "slipshow" |]
+    [|
+      DocumentSelector.language ~scheme:"file" ~pattern:"**/*.slp" "slipshow";
+    |]
   in
   let clientOptions = ClientOptions.create ~documentSelector () in
   let id = "slipshow" and name = "Slipshow" in
