@@ -1,8 +1,13 @@
 # Change Log
 
-All notable changes to the "slipshow" extension will be documented in this file.
+## Unreleased
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+- Switch to LSP: (#4)
+  - Requires slipshow to be installed in the environment.
+  - Displays errors squiggles, doc on hover, highlight occurrences, go to definition, ...
+  - Supports multi-file.
+  - Automatically serve previews.
+  - Requires files to have `.slp` extension.
 
 ## v0.0.8
 
