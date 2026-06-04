@@ -14,18 +14,29 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onLanguage:plaintext",
+    "workspaceContains:*.slp"
+  ],
   "main": "./extension_compiled.js",
   "browser": "./web_ide.js",
   "contributes": {
+    "languages": [
+      {
+        "id": "slipshow",
+        "extensions": [
+          ".slp"
+        ]
+      }
+    ],
     "commands": [
       {
-        "command": "slipshow.preview",
-        "title": "Slipshow: Preview"
+        "command": "slipshow.next",
+        "title": "Slipshow: Go forward in the preview"
       },
       {
-        "command": "slipshow.slipshow",
-        "title": "Slipshow: Compile"
+        "command": "slipshow.previous",
+        "title": "Slipshow: Go backward in the preview"
       }
     ]
   },
@@ -47,6 +58,7 @@
   },
   "dependencies": {
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
-    "@esbuild-plugins/node-modules-polyfill": "^0.2.2"
+    "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
+    "vscode-languageclient": "^9.0.1"
   }
 }

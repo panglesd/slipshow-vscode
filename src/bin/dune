@@ -2,6 +2,17 @@
  ; (public_name slipshow_extension_builder)
  (name main)
  (modes js)
- (preprocess (pps ppx_blob))
-  (preprocessor_deps ../src-panel/vscode_previewer.bc.js)
- (libraries slipshow_extension_builder vscode brr js_of_ocaml slipshow bos node slipshow.server_assets ansi))
+ (preprocess
+  (pps ppx_blob))
+ (preprocessor_deps ../src-panel/vscode_previewer.bc.js)
+ (libraries
+  slipshow_extension_builder
+  vscode
+  brr
+  js_of_ocaml
+  slipshow
+  bos
+  node
+  slipshow.server_assets
+  ansi
+  vscode.languageclient))
