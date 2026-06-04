@@ -27,15 +27,13 @@ let move direction server ~args:_ =
 
 let next = move `Forward
 let previous = move `Backward
+let start ~args:_ = Ojs.unit_to_js ()
+
+let subscribe context ~command ~callback =
+  let disposable = Vscode.Commands.registerCommand ~command ~callback in
+  Vscode.ExtensionContext.subscribe context ~disposable
 
 let register server context =
-  let next_disposable =
-    Vscode.Commands.registerCommand ~command:"slipshow.next"
-      ~callback:(next server)
-  in
-  Vscode.ExtensionContext.subscribe context ~disposable:next_disposable;
-  let previous_disposable =
-    Vscode.Commands.registerCommand ~command:"slipshow.previous"
-      ~callback:(previous server)
-  in
-  Vscode.ExtensionContext.subscribe context ~disposable:previous_disposable
+  subscribe context ~command:"slipshow.next" ~callback:(next server);
+  subscribe context ~command:"slipshow.previous" ~callback:(previous server);
+  subscribe context ~command:"slipshow.startServer" ~callback:start

@@ -15,8 +15,8 @@
     "Other"
   ],
   "activationEvents": [
-    "onLanguage:plaintext",
-    "workspaceContains:*.slp"
+    "workspaceContains:*.slp",
+    "onCommand:slipshow.startServer"
   ],
   "main": "./extension_compiled.js",
   "browser": "./web_ide.js",
@@ -33,6 +33,10 @@
       {
         "command": "slipshow.next",
         "title": "Slipshow: Go forward in the preview"
+      },
+      {
+        "command": "slipshow.startServer",
+        "title": "Slipshow: Start server"
       },
       {
         "command": "slipshow.previous",
