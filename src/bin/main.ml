@@ -7,7 +7,7 @@ let activate context =
   in
   let documentSelector =
     [|
-      DocumentSelector.language ~scheme:"file" ~pattern:"**/*.slp" "slipshow";
+      DocumentSelector.language ~scheme:"file" ~pattern:"**/*.slp" "markdown";
     |]
   in
   let clientOptions = ClientOptions.create ~documentSelector () in
