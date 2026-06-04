@@ -4,7 +4,7 @@
 
 - Switch to LSP: (#4)
   - Requires slipshow to be installed in the environment.
-  - Displays errors squiggles, doc on hover, highlight occurrences, go to definition, ...
+  - Displays error squiggles, doc on hover, highlight occurrences, go to definition, ...
   - Supports multi-file.
   - Automatically serve previews.
   - Requires files to have `.slp` extension.
