@@ -2,6 +2,7 @@
  ; (public_name slipshow_extension_builder)
  (name main)
  (modes js)
- (preprocess (pps ppx_blob))
-  (preprocessor_deps ../src-panel/vscode_previewer.bc.js)
+ (preprocess
+  (pps ppx_blob))
+ (preprocessor_deps ../src-panel/vscode_previewer.bc.js)
  (libraries brr slipshow vscode))
