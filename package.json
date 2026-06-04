@@ -15,7 +15,7 @@
     "Other"
   ],
   "activationEvents": [
-    "workspaceContains:*.slp",
+    "workspaceContains:**/*.slp",
     "onCommand:slipshow.startServer"
   ],
   "main": "./extension_compiled.js",
