@@ -9,7 +9,7 @@
  (mode promote))
 
 (rule
- (deps extension.js)
+ (deps extension.js package.json)
  (action
   (with-stdout-to
    extension_compiled.js
