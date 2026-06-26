@@ -42,7 +42,20 @@
         "command": "slipshow.previous",
         "title": "Slipshow: Go backward in the preview"
       }
-    ]
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Slipshow",
+      "properties": {
+        "slipshow.refreshOn": {
+          "scope": "resource",
+          "type": "string",
+          "enum": ["Key stroke", "Save"],
+          "default": "Key stroke",
+          "description": "Describes when to refresh the preview window"
+        }
+      }
+    }
   },
   "scripts": {
     "lint": "eslint .",

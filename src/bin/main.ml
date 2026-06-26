@@ -11,6 +11,21 @@ let activate context =
     |]
   in
   let clientOptions = ClientOptions.create ~documentSelector () in
+  (* We don't need this anymore, as we are using the pull model correctly now *)
+  (* let clientOptions = *)
+  (*   let ojs = clientOptions |> ClientOptions.t_to_js in *)
+  (*   (\* See *)
+  (*      https://github.com/microsoft/vscode-languageserver-node/blob/main/client/src/common/configuration.ts#L145 *)
+  (*      for the synchronize option "documentation" *\) *)
+  (*   let synchronize_options = *)
+  (*     let res = Ojs.empty_obj () in *)
+  (*     Ojs.set_prop_ascii res "configurationSection" *)
+  (*       (Ojs.string_to_js "slipshow"); *)
+  (*     res *)
+  (*   in *)
+  (*   Ojs.set_prop_ascii ojs "synchronize" synchronize_options; *)
+  (*   ojs |> ClientOptions.t_of_js *)
+  (* in *)
   let id = "slipshow" and name = "Slipshow" in
   let client = LanguageClient.make ~id ~name ~serverOptions ~clientOptions () in
   client_state := Some client;
