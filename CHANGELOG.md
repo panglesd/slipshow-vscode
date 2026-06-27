@@ -8,6 +8,7 @@
   - Supports multi-file.
   - Automatically serve previews.
   - Requires files to have `.slp` extension.
+- Setting to change when to refresh the preview: on key stroke or on save (#5)
 
 ## v0.0.8
 
