@@ -1,4 +1,4 @@
-# slipshow README
+# Slipshow's VSCode extension
 
 This is a VS Code extension to write, preview and compile [slipshow](https://github.com/panglesd/slipshow/) presentations.
 
